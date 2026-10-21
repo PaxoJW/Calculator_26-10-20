@@ -1,0 +1,33 @@
+body {
+    
+}
+
+.calculator-container {
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    width: 150px;
+    
+}
+
+.display {
+    height: 15px;
+    background-color: rgb(201, 204, 207);
+    aspect-ratio: 10/1;
+}
+
+.numpad {
+    width: 75px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+}
+
+.operations {
+    width: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px
+}

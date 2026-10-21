@@ -11,8 +11,7 @@ let firstNumber = "";
 let secondNumber = "";
 let operator = "";
 
-function operate (operator, firstNumber, secondNumber) {
-    
+function operate (operator, firstNumber, secondNumber) {  
     if (operator === '+') {
         return calculator.add(firstNumber, secondNumber);
     } else if (operator === '-') {
