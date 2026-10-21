@@ -29,7 +29,7 @@ console.log(numBtns);
 numBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
         console.log("We're getting clicked");
-        if (firstNumber === '') {
+        if (operator === '') {
             firstNumber = e.target.innerHTML;
         } else {
             secondNumber = e.target.innerHTML;
