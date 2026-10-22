@@ -1,8 +1,8 @@
 const calculator = (function() {
-    const add = (a,b) => a + b;
-    const sub = (a,b) => a - b;
-    const mul = (a,b) => a * b;
-    const div = (a,b) => a / b;
+    const add = (a,b) => Number(a) + Number(b);
+    const sub = (a,b) => Number(a) - Number(b);
+    const mul = (a,b) => Number(a) * Number(b);
+    const div = (a,b) => Number(a) / Number(b);
     return {add, sub, mul, div};
 })();
 
@@ -20,43 +20,78 @@ function operate (operator, firstNumber, secondNumber) {
     } else if (operator === '*') {
         return calculator.mul(firstNumber, secondNumber);
     } else {
+        console.log(operator);
         return calculator.div(firstNumber, secondNumber);
     }
 }
+
+let display = document.querySelector(".calculator-container > .display");
 
 let numBtns = document.querySelectorAll(".calculator-container > .numpad > button");
 console.log(numBtns);
 numBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
         console.log("We're getting clicked");
-        if (operator === '') {
-            firstNumber = e.target.innerHTML;
+        if (operator === '' && result === '') {
+            firstNumber += e.target.innerText;
+        } else if (operator === '' && result !== ''){
+            firstNumber = e.target.innerText;
+            result = '';
         } else {
-            secondNumber = e.target.innerHTML;
+            secondNumber += e.target.innerText;
         }
-        console.log(firstNumber, secondNumber);
+        console.log("numbers clicked so far", firstNumber, secondNumber);
     });
 });
 
-let opBtns = document.querySelectorAll(".calculator-container > .operations > button");
-
+let opBtns = document.querySelectorAll(".calculator-container > .operations > .operators > button");
+console.log(opBtns);
 opBtns.forEach(btn => {
-    btn.addEventListener("click", (e) => {  
-        if (e.target.innerText === '=') {
-            if (secondNumber !== '') {
-                result = operate(operator, firstNumber, secondNumber);
-                console.log("Give me what's mine");
-                console.log(result);
-                firstNumber = result;
-                secondNumber = '';
-                operator = '';
-            }
-        } else if (e.target.innerHTML === 'Canc') {
-            console.log("You're beign deleted");
+    btn.addEventListener("click", (e) => {
+        console.log("Operators are beign selected");
+        if (secondNumber !== '') {
+            result = operate(operator, firstNumber, secondNumber);
+            console.log("Calculating this first...");
+            firstNumber = result;
+            secondNumber = '';
+            operator = e.target.innerText;
+            console.log(result, operator);
         } else {
-            console.log("Operations are beign made");
-            operator = e.target.innerHTML;
-        }   
+            operator = e.target.innerText;
+        }        
         console.log(operator);
     });
 });
+
+let equalBtn = document.querySelector(".equalBtn");
+let cancBtn = document.querySelector(".cancBtn");
+
+equalBtn.addEventListener("click", () => {
+    if (secondNumber !== '') {
+        console.log("before operation:", typeof(firstNumber), operator, typeof(secondNumber));
+        result = operate(operator, firstNumber, secondNumber);
+        console.log("Calculating...");
+        console.log(result);
+        console.log("after operation:", typeof(firstNumber), operator, typeof(secondNumber));
+        firstNumber = result;
+        secondNumber = '';
+        operator = '';
+        
+    } else {
+        console.log("You are missing something:", firstNumber, operator,secondNumber);
+    }  
+})
+    
+
+cancBtn.addEventListener("click", () => {
+    firstNumber = '';
+    secondNumber = '';
+    operator = '';
+    console.log(firstNumber, secondNumber, operator);
+})
+
+
+
+
+
+
