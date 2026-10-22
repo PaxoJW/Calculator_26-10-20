@@ -27,7 +27,11 @@ function operate (operator, firstNumber, secondNumber) {
 
 let display = document.querySelector(".calculator-container > .display");
 
-let numBtns = document.querySelectorAll(".calculator-container > .numpad > button");
+function displayOp(array) {
+    display.innerHTML = `${array.join("")}`;
+}
+
+let numBtns = document.querySelectorAll(".btns-container > .numpad > button");
 console.log(numBtns);
 numBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -41,10 +45,12 @@ numBtns.forEach(btn => {
             secondNumber += e.target.innerText;
         }
         console.log("numbers clicked so far", firstNumber, secondNumber);
+        displayOp([firstNumber, operator, secondNumber]);
     });
+    
 });
 
-let opBtns = document.querySelectorAll(".calculator-container > .operations > .operators > button");
+let opBtns = document.querySelectorAll(".btns-container > .operations > .operators > button");
 console.log(opBtns);
 opBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -60,6 +66,7 @@ opBtns.forEach(btn => {
             operator = e.target.innerText;
         }        
         console.log(operator);
+        displayOp([firstNumber, operator, secondNumber]);
     });
 });
 
@@ -76,22 +83,21 @@ equalBtn.addEventListener("click", () => {
         firstNumber = result;
         secondNumber = '';
         operator = '';
-        
+        displayOp([firstNumber, operator, secondNumber]);
     } else {
         console.log("You are missing something:", firstNumber, operator,secondNumber);
-    }  
+        displayOp([firstNumber, operator, secondNumber]);
+    }
+    
 })
     
-
 cancBtn.addEventListener("click", () => {
     firstNumber = '';
     secondNumber = '';
     operator = '';
     console.log(firstNumber, secondNumber, operator);
+    displayOp([firstNumber, operator, secondNumber]);
 })
-
-
-
 
 
 

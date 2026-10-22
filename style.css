@@ -1,19 +1,23 @@
 body {
-    
+    box-sizing: border-box;
 }
 
 .calculator-container {
     border: 1px solid black;
+}
+
+.btns-container {
     display: flex;
     flex-wrap: wrap;
-    width: 150px;
-    
+    justify-content: space-evenly;
+    margin: 20px;
 }
 
 .display {
-    height: 15px;
+    width: auto;
     background-color: rgb(201, 204, 207);
-    aspect-ratio: 10/1;
+    padding: 5px;
+    margin-bottom: 10px; 
 }
 
 .numpad {
@@ -24,10 +28,10 @@ body {
     gap: 2px;
 }
 
-.operations {
+.operators {
     width: 50px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
     gap: 2px
 }
