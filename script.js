@@ -12,27 +12,48 @@ let secondNumber = "";
 let operator = "";
 let result = 0;
 
-function operate (operator, firstNumber, secondNumber) {  
-    if (operator === '+') {
-        return calculator.add(firstNumber, secondNumber);
-    } else if (operator === '-') {
-        return calculator.sub(firstNumber, secondNumber);
-    } else if (operator === '*') {
-        return calculator.mul(firstNumber, secondNumber);
-    } else {
-        console.log(operator);
-        return calculator.div(firstNumber, secondNumber);
-    }
-}
-
 let display = document.querySelector(".calculator-container > .display");
 
+let numBtns = document.querySelectorAll(".btns-container > .numpad > button");
+
+let opBtns = document.querySelectorAll(".btns-container > .operations > .operators > button");
+
+let equalBtn = document.querySelector(".equalBtn");
+let cancBtn = document.querySelector(".cancBtn");
+let decimalBtn = document.querySelector(".decimalBtn");
+let delBtn = document.querySelector(".delBtn");
+
+function isFloat(n) {
+    return Number(n) === n && n % 1 !==0;
+}
+
+
+function operate (operator, firstNumber, secondNumber) {  
+    result = '';
+    if (operator === '+') {
+        result = calculator.add(firstNumber, secondNumber);
+    } else if (operator === '-') {
+        result = calculator.sub(firstNumber, secondNumber);
+    } else if (operator === '*') {
+        result = calculator.mul(firstNumber, secondNumber);
+    } else {
+        console.log(operator);
+        result = calculator.div(firstNumber, secondNumber);
+    }
+    if (isFloat(result)) {
+        return result.toFixed(2);
+    } else {
+        return result;
+    }
+    
+}
+
+//function to display on the calculator screen
 function displayOp(array) {
     display.innerHTML = `${array.join("")}`;
 }
 
-let numBtns = document.querySelectorAll(".btns-container > .numpad > button");
-console.log(numBtns);
+//function to control number buttons
 numBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
         console.log("We're getting clicked");
@@ -40,18 +61,18 @@ numBtns.forEach(btn => {
             firstNumber += e.target.innerText;
         } else if (operator === '' && result !== ''){
             firstNumber = e.target.innerText;
+            decimalBtn.disabled = false;
             result = '';
         } else {
             secondNumber += e.target.innerText;
         }
-        console.log("numbers clicked so far", firstNumber, secondNumber);
+        console.log("numbers clicked so far:", firstNumber, secondNumber);
         displayOp([firstNumber, operator, secondNumber]);
     });
     
 });
 
-let opBtns = document.querySelectorAll(".btns-container > .operations > .operators > button");
-console.log(opBtns);
+//function to control operators logic
 opBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
         console.log("Operators are beign selected");
@@ -66,12 +87,11 @@ opBtns.forEach(btn => {
             operator = e.target.innerText;
         }        
         console.log(operator);
+        decimalBtn.disabled = false;
         displayOp([firstNumber, operator, secondNumber]);
     });
 });
 
-let equalBtn = document.querySelector(".equalBtn");
-let cancBtn = document.querySelector(".cancBtn");
 
 equalBtn.addEventListener("click", () => {
     if (secondNumber !== '') {
@@ -81,23 +101,57 @@ equalBtn.addEventListener("click", () => {
         console.log(result);
         console.log("after operation:", typeof(firstNumber), operator, typeof(secondNumber));
         firstNumber = result;
-        secondNumber = '';
         operator = '';
+        secondNumber = '';
         displayOp([firstNumber, operator, secondNumber]);
     } else {
         console.log("You are missing something:", firstNumber, operator,secondNumber);
         displayOp([firstNumber, operator, secondNumber]);
     }
-    
 })
     
 cancBtn.addEventListener("click", () => {
     firstNumber = '';
-    secondNumber = '';
     operator = '';
+    secondNumber = '';
     console.log(firstNumber, secondNumber, operator);
+    // activate decimal button
+    decimalBtn.disabled = false;
     displayOp([firstNumber, operator, secondNumber]);
 })
 
+delBtn.addEventListener("click", (e) => {
+    if (secondNumber !== "") {
+        secondNumber = secondNumber.slice(0,-1);
+    } else if (operator !== "") {
+        operator = '';
+    } else {
+        console.log(e.target);
+        firstNumber = firstNumber.slice(0, -1);
+        console.log(firstNumber);
+    }
+    displayOp([firstNumber, operator, secondNumber]);
+})
 
-
+decimalBtn.addEventListener("click", (e) => {
+    console.log("click")
+    if (firstNumber === '') {
+        console.log("click 1");
+        firstNumber = "0" + e.target.innerText;
+    } else if (operator === '' && firstNumber !== ''){
+        console.log("click 2");
+        console.log(e.target.innerText);
+        console.log(typeof(firstNumber), typeof(e.target.innerText));
+        firstNumber += e.target.innerText;
+    } else if (operator !== '' && secondNumber === '') {
+        console.log("click 3");
+        secondNumber = "0" + e.target.innerText;
+    } else {
+        console.log("click 4");
+        secondNumber += e.target.innerText;
+    }
+    //deactivate the button
+    decimalBtn.disabled = true;
+    
+    displayOp([firstNumber, operator, secondNumber]);
+})
