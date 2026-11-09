@@ -23,6 +23,7 @@ let cancBtn = document.querySelector(".cancBtn");
 let decimalBtn = document.querySelector(".decimalBtn");
 let delBtn = document.querySelector(".delBtn");
 
+//Check if it is a float
 function isFloat(n) {
     return Number(n) === n && n % 1 !==0;
 }
@@ -38,8 +39,13 @@ function operate (operator, firstNumber, secondNumber) {
         result = calculator.mul(firstNumber, secondNumber);
     } else {
         console.log(operator);
-        result = calculator.div(firstNumber, secondNumber);
+        if (secondNumber === 0) {
+            console.log("Can't divide by", secondNumber);
+        } else {
+            result = calculator.div(firstNumber, secondNumber);
+        }
     }
+    //If float limit the decimal places to 2
     if (isFloat(result)) {
         return result.toFixed(2);
     } else {
@@ -125,9 +131,12 @@ delBtn.addEventListener("click", (e) => {
         secondNumber = secondNumber.slice(0,-1);
     } else if (operator !== "") {
         operator = '';
+    } else if (result !== "") {
+        firstNumber = ''
+        result = ''
     } else {
-        console.log(e.target);
-        firstNumber = firstNumber.slice(0, -1);
+        console.log(typeof(firstNumber), typeof(result));
+        firstNumber = String(firstNumber).slice(0, -1);
         console.log(firstNumber);
     }
     displayOp([firstNumber, operator, secondNumber]);
