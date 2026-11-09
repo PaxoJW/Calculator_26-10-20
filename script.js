@@ -38,12 +38,7 @@ function operate (operator, firstNumber, secondNumber) {
     } else if (operator === '*') {
         result = calculator.mul(firstNumber, secondNumber);
     } else {
-        console.log(operator);
-        if (secondNumber === 0) {
-            console.log("Can't divide by", secondNumber);
-        } else {
-            result = calculator.div(firstNumber, secondNumber);
-        }
+        result = calculator.div(firstNumber, secondNumber);
     }
     //If float limit the decimal places to 2
     if (isFloat(result)) {
@@ -62,7 +57,6 @@ function displayOp(array) {
 //function to control number buttons
 numBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
-        console.log("We're getting clicked");
         if (operator === '' && result === '') {
             firstNumber += e.target.innerText;
         } else if (operator === '' && result !== ''){
@@ -83,17 +77,23 @@ opBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
         console.log("Operators are beign selected");
         if (secondNumber !== '') {
-            result = operate(operator, firstNumber, secondNumber);
-            console.log("Calculating this first...");
-            firstNumber = result;
-            secondNumber = '';
-            operator = e.target.innerText;
-            console.log(result, operator);
+            if (operator === '/' && Number(secondNumber) === 0) {
+                alert("Can't divide by", secondNumber);
+                secondNumber = '';
+            } else {
+                console.log("Calculating this first...");
+                result = operate(operator, firstNumber, secondNumber);
+                firstNumber = result;
+                secondNumber = '';
+                operator = e.target.innerText;
+                decimalBtn.disabled = false;
+                console.log(result, operator);
+            }
         } else {
             operator = e.target.innerText;
+            decimalBtn.disabled = false;
         }        
         console.log(operator);
-        decimalBtn.disabled = false;
         displayOp([firstNumber, operator, secondNumber]);
     });
 });
@@ -101,19 +101,23 @@ opBtns.forEach(btn => {
 
 equalBtn.addEventListener("click", () => {
     if (secondNumber !== '') {
-        console.log("before operation:", typeof(firstNumber), operator, typeof(secondNumber));
-        result = operate(operator, firstNumber, secondNumber);
-        console.log("Calculating...");
-        console.log(result);
-        console.log("after operation:", typeof(firstNumber), operator, typeof(secondNumber));
-        firstNumber = result;
-        operator = '';
-        secondNumber = '';
-        displayOp([firstNumber, operator, secondNumber]);
+        if (operator === '/' && Number(secondNumber) === 0) {
+            alert("Can't divide by", secondNumber);
+            secondNumber = '';
+        } else {
+            result = operate(operator, firstNumber, secondNumber);
+            console.log("Calculating...");
+            console.log(result);
+            firstNumber = result;
+            operator = '';
+            secondNumber = '';
+            decimalBtn.disabled = false;
+        }
     } else {
         console.log("You are missing something:", firstNumber, operator,secondNumber);
-        displayOp([firstNumber, operator, secondNumber]);
+        
     }
+    displayOp([firstNumber, operator, secondNumber]);
 })
     
 cancBtn.addEventListener("click", () => {
@@ -143,14 +147,14 @@ delBtn.addEventListener("click", (e) => {
 })
 
 decimalBtn.addEventListener("click", (e) => {
-    console.log("click")
-    if (firstNumber === '') {
+    if (operator === '' && result !== ''){
         console.log("click 1");
-        firstNumber = "0" + e.target.innerText;
-    } else if (operator === '' && firstNumber !== ''){
-        console.log("click 2");
         console.log(e.target.innerText);
         console.log(typeof(firstNumber), typeof(e.target.innerText));
+        firstNumber = "0" + e.target.innerText;
+        result = '';
+    } else if (operator === '' && result === '') {
+        console.log("click 2");
         firstNumber += e.target.innerText;
     } else if (operator !== '' && secondNumber === '') {
         console.log("click 3");
